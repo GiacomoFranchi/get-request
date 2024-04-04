@@ -17,6 +17,7 @@
                         {{ __('You are logged in!') }}
                     </div>
                 </div>
+                <a href="{{ route('index')}}">sda</a>
             </div>
         </div>
     </div>
