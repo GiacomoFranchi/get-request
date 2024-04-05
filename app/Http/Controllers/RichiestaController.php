@@ -16,11 +16,19 @@ class RichiestaController extends Controller
         $validatedData = $request->validate([
             'nome' => 'required|string|min:3',
             'cognome' => 'required|string|min:3',
-            'data_di_nascita' => 'required|date',
+            'data_di_nascita' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    if (strtotime($value) > time()) {
+                        $fail('La data di nascita non può essere nel futuro.');
+                    }
+                },
+            ],
             'provincia' => 'required|string',
             'nome_comune' => 'required|string', 
             'richiesta' => 'required|string',
-        ]);
+        ]);    
     
         $nuova_richiesta = new Richiesta();
         $nuova_richiesta->fill($validatedData);

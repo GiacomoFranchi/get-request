@@ -10,13 +10,13 @@
             {{-- Input Nome --}}
             <div class="mb-4 has-validation">
                 <label for="nome" class="form-label fw-bold">Nome</label>
-                <input required minlength="3" type="text" class="form-control " id="nome" name="nome">
+                <input required minlength="3" type="text" class="form-control " id="nome" name="nome" value="{{old('nome')}}">
             </div>
 
             {{-- Input Cognome --}}
             <div class="mb-4 has-validation">
                 <label for="cognome" class="form-label fw-bold">Cognome</label>
-                <input required minlength="3" type="text" class="form-control " id="cognome" name="cognome">
+                <input required minlength="3" type="text" class="form-control " id="cognome" name="cognome" value="{{old('cognome')}}">
             </div>
             {{-- data di nscita --}}
             <div class="mb-4 has-validation">
@@ -30,7 +30,7 @@
             </div>
 
             {{-- Selezione Provincia --}}
-            <select name="provincia" id="provincia">
+            <select required name="provincia" id="provincia">
                 <option value="">Seleziona una provincia</option>
                 @foreach ($province as $prov)
                     <option value="{{ $prov->nome }}">{{ $prov->nome }}</option>
@@ -41,7 +41,7 @@
             <input type="hidden" id="nome_comune_hidden" name="nome_comune" value="">
 
             {{-- Selezione Comune --}}
-            <select name="comuni" id="comuni">
+            <select required name="comuni" id="comuni">
                 <option value="">Seleziona prima una provincia</option>
                 @foreach ($comuni as $comune)
                     <option value="{{ $comune->nome }}">{{ $comune->nome }}</option>
@@ -64,6 +64,7 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--Chiamata ajax-->
     <script>
         $(document).ready(function() {
             $('#provincia').change(function() {
@@ -109,9 +110,104 @@
             $('#comuni').change(function() {
                 var nomeComuneSelezionato = $(this).val();
                 $('#nome_comune_hidden').val(
-                nomeComuneSelezionato);
+                    nomeComuneSelezionato);
                 console.log("Comune selezionato: ", nomeComuneSelezionato);
             });
         });
     </script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery Validate -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <!--Regole Validazione-->
+    <script>
+        $(document).ready(function() {
+            $.validator.addMethod("lettersonly", function(value, element) {
+                return this.optional(element) || /^[a-zA-Z]+$/i.test(value);
+            }, "Inserisci solo lettere.");
+    
+
+            $("#form").validate({
+                rules: {
+                    nome: {
+                        required: true,
+                        minlength: 3,
+                        lettersonly: true e
+                    },
+                    cognome: {
+                        required: true,
+                        minlength: 3,
+                        lettersonly: true 
+                    },
+                    data_di_nascita: {
+                        required: true,
+                        maxDate: new Date() 
+                    },
+                    provincia: {
+                        required: true
+                    },
+                    comuni: {
+                        required: true
+                    },
+                    richiesta: {
+                        required: true
+                    }
+                },
+                messages: {
+                    nome: {
+                        required: "Il nome è obbligatorio.",
+                        minlength: "Il nome deve essere lungo almeno 3 caratteri.",
+                        lettersonly: "Il nome può contenere solo lettere."
+                    },
+                    cognome: {
+                        required: "Il cognome è obbligatorio.",
+                        minlength: "Il cognome deve essere lungo almeno 3 caratteri.",
+                        lettersonly: "Il cognome può contenere solo lettere."
+                    },
+                    data_di_nascita: {
+                        required: "La data di nascita è obbligatoria.",
+                        maxDate: "La data di nascita non può essere futura."
+                    },
+                    provincia: {
+                        required: "Compila il campo, Grazie",
+                    },
+                    comuni: {
+                        required: "Compila il campo, Grazie",
+                    },
+                    richiesta: {
+                        required: "Compila il campo, Grazie",
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
+        });
+    </script>
+    
+
+
+    <style>
+        h1 {
+            text-align: center;
+            margin-top: 2rem;
+            color: red;
+        }
+
+        form {
+            width: 50%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        select {
+            margin-bottom: 1rem;
+        }
+
+        button {
+            width: 20%;
+            margin: 1rem auto 2rem;
+        }
+    </style>
 @endsection

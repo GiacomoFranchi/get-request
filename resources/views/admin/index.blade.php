@@ -30,8 +30,8 @@
                         <td>{{ $richiesta->cognome }}</td>
                         {{-- show button --}}
                         <td>
-                            <a href="{{ route('richieste.show', ['id' => $richiesta->id]) }}">
-                                <i class="fa-solid fa-circle-info"></i>
+                            <a class="info" href="{{ route('richieste.show', ['id' => $richiesta->id]) }}">
+                                <i class="fa-solid fa-circle-info"> info</i>
                             </a>
                         </td>
                     </tr>
@@ -40,8 +40,11 @@
         </table>
     @else
         <div class="alert alert-warning w-50 mx-auto">
-            There's nothing here yet. Add your first restaurant.
+           <p> Nessuna Richiesta Ottenuta</p>
         </div>
     @endif
 </div>
+<style>
+
+</style>
 @endsection
