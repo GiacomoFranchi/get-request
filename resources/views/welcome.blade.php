@@ -10,13 +10,15 @@
             {{-- Input Nome --}}
             <div class="mb-4 has-validation">
                 <label for="nome" class="form-label fw-bold">Nome</label>
-                <input required minlength="3" type="text" class="form-control " id="nome" name="nome" value="{{old('nome')}}">
+                <input required minlength="3" type="text" class="form-control " id="nome" name="nome"
+                    value="{{ old('nome') }}">
             </div>
 
             {{-- Input Cognome --}}
             <div class="mb-4 has-validation">
                 <label for="cognome" class="form-label fw-bold">Cognome</label>
-                <input required minlength="3" type="text" class="form-control " id="cognome" name="cognome" value="{{old('cognome')}}">
+                <input required minlength="3" type="text" class="form-control " id="cognome" name="cognome"
+                    value="{{ old('cognome') }}">
             </div>
             {{-- data di nscita --}}
             <div class="mb-4 has-validation">
@@ -33,20 +35,23 @@
             <select required name="provincia" id="provincia">
                 <option value="">Seleziona una provincia</option>
                 @foreach ($province as $prov)
-                    <option value="{{ $prov->nome }}">{{ $prov->nome }}</option>
+                    <option value="{{ $prov->nome }}" @if (old('provincia') == $prov->nome) selected @endif>
+                        {{ $prov->nome }}</option>
                 @endforeach
             </select>
 
             {{-- Campo Nascosto per il Comune --}}
-            <input type="hidden" id="nome_comune_hidden" name="nome_comune" value="">
+            <input type="hidden" id="nome_comune_hidden" name="nome_comune" value="{{ old('nome_comune') }}">
 
             {{-- Selezione Comune --}}
             <select required name="comuni" id="comuni">
                 <option value="">Seleziona prima una provincia</option>
                 @foreach ($comuni as $comune)
-                    <option value="{{ $comune->nome }}">{{ $comune->nome }}</option>
+                    <option value="{{ $comune->nome }}" @if (old('nome_comune') == $comune->nome) selected @endif>
+                        {{ $comune->nome }}</option>
                 @endforeach
             </select>
+
             {{-- testo --}}
             <div class="mb-4 has-validation">
                 <label for="richiesta" class="form-label fw-bold">Richiesta</label>
@@ -107,11 +112,11 @@
                     $('#comuni').empty();
                 }
             });
-            $('#comuni').change(function() {
-                var nomeComuneSelezionato = $(this).val();
-                $('#nome_comune_hidden').val(
-                    nomeComuneSelezionato);
-                console.log("Comune selezionato: ", nomeComuneSelezionato);
+            $(document).ready(function() {
+                $('#comuni').change(function() {
+                    var selectedComune = $(this).val();
+                    $('#nome_comune_hidden').val(selectedComune);
+                });
             });
         });
     </script>
@@ -125,23 +130,23 @@
             $.validator.addMethod("lettersonly", function(value, element) {
                 return this.optional(element) || /^[a-zA-Z]+$/i.test(value);
             }, "Inserisci solo lettere.");
-    
+
 
             $("#form").validate({
                 rules: {
                     nome: {
                         required: true,
                         minlength: 3,
-                        lettersonly: true e
+                        lettersonly: true
                     },
                     cognome: {
                         required: true,
                         minlength: 3,
-                        lettersonly: true 
+                        lettersonly: true
                     },
                     data_di_nascita: {
                         required: true,
-                        maxDate: new Date() 
+                        maxDate: new Date()
                     },
                     provincia: {
                         required: true
@@ -184,7 +189,7 @@
             });
         });
     </script>
-    
+
 
 
     <style>
